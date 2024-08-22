@@ -30,4 +30,12 @@ RSpec.describe Board, type: :model do
       expect(board.valid?).to be true
     end
   end
+
+  describe "#create" do
+    it "sets board cells upon creation" do
+      board = create(:board, :star_shape)
+      expect(board.live_cells.size).to be 5
+      expect(board.cells.size).to be (board.rows * board.columns)
+    end
+  end
 end
