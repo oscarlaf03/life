@@ -10,5 +10,24 @@ RSpec.describe Board, type: :model do
           |message| message.match? "must be less than or equal to #{Board::ROW_LIMIT}"}
         ).to be true
     end
+
+    it "respects column limit" do
+      board = Board.new(columns: Board::COLUMN_LIMIT + 1)
+      expect(board.valid?).to be false
+      expect(
+        board.errors.messages[:columns].any? {
+          |message| message.match? "must be less than or equal to #{Board::COLUMN_LIMIT}"}
+        ).to be true
+    end
+
+    it "validates syntax for initial_cells" do
+      board = build(:board, :with_one_cell)
+      expect(board.valid?).to be true
+    end
+
+    it "validates syntax for initial_cells" do
+      board = build(:board, :with_two_cells)
+      expect(board.valid?).to be true
+    end
   end
 end
