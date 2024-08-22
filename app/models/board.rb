@@ -19,7 +19,7 @@ class Board < ApplicationRecord
     update(runs: runs + 1)
     affected = cells.select { |cell| cell.should_toggle? }
     if affected.size.zero? && !runs.zero?
-      raise StandardError.new "Board concluded nothing changed at after run number #{runs}"
+      raise StandardError.new "Board concluded, nothing changed after run number #{runs}"
     end
     affected.each(&:toggle!)
   end

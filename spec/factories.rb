@@ -14,5 +14,17 @@ FactoryBot.define do
       columns { 50 }
       initial_cells { '[{"row": 25, "column":25}, {"row":25, "column": 24}, {"row":25, "column": 26}, {"row":24, "column": 25}, {"row":26, "column": 25}]' }
     end
+
+    trait :just_one_change do
+      rows { 3 }
+      columns { 3 }
+      initial_cells { '[
+        {"row": 3, "column":3},
+        {"row":1, "column": 1},
+        {"row":1, "column": 3},
+        {"row":3, "column": 1},
+        {"row":2, "column": 2}
+      ]' }
+    end
   end
 end

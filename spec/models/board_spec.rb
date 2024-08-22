@@ -44,5 +44,16 @@ RSpec.describe Board, type: :model do
       board = create(:board, :star_shape)
       expect { board.next! }.to change { Cell.find_by!(row: 25, column: 25, board: board).alive }.from(true).to(false)
     end
+
+    it "it halts on conlusion" do
+      board = create(:board, :just_one_change)
+      board.next!
+      expect { board.next! }.to raise_error(StandardError)
+    end
+
+    it "halts afer RUN_LIMIT" do
+      board = create(:board, :star_shape, runs: Board::RUN_LIMIT)
+      expect { board.next! }.to raise_error(StandardError)
+    end
   end
 end
