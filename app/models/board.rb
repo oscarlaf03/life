@@ -1,6 +1,7 @@
 class Board < ApplicationRecord
   ROW_LIMIT = 100
   COLUMN_LIMIT = 100
+  RUN_LIMIT = 200
   validates :rows, numericality: { less_than_or_equal_to: ROW_LIMIT }
   validates :columns, numericality: { less_than_or_equal_to: COLUMN_LIMIT }
   validate :initial_cells_format
@@ -11,6 +12,16 @@ class Board < ApplicationRecord
 
   def live_cells
     cells.where(alive: true)
+  end
+
+  def next!
+    raise StandardError.new "Over Board number of runs limit" if runs + 1 >= RUN_LIMIT
+    update(runs: runs + 1)
+    affected = cells.select { |cell| cell.should_toggle? }
+    if affected.size.zero? && !runs.zero?
+      raise StandardError.new "Board concluded nothing changed at after run number #{runs}"
+    end
+    affected.each(&:toggle!)
   end
 
   private
@@ -47,16 +58,15 @@ class Board < ApplicationRecord
 
 
   def initial_cells_format
-    return if initial_cells == '[]'
+    return if initial_cells == "[]"
 
     begin
       cells = init_cells
-      unless cells.is_a?(Array) && cells.all? { |cell| cell.is_a?(Hash) && cell.key?('row') && cell.key?('column') && cell['row'].is_a?(Integer) && cell['column'].is_a?(Integer) }
+      unless cells.is_a?(Array) && cells.all? { |cell| cell.is_a?(Hash) && cell.key?("row") && cell.key?("column") && cell["row"].is_a?(Integer) && cell["column"].is_a?(Integer) }
         errors.add(:initial_cells, "must be an array of objects with 'row' and 'column' keys and integer values")
       end
     rescue JSON::ParserError
       errors.add(:initial_cells, "must be a valid JSON array")
     end
   end
-
 end

@@ -38,4 +38,11 @@ RSpec.describe Board, type: :model do
       expect(board.cells.size).to be (board.rows * board.columns)
     end
   end
+
+  describe "#next" do
+    it "runs next board stage" do
+      board = create(:board, :star_shape)
+      expect { board.next! }.to change { Cell.find_by!(row: 25, column: 25, board: board).alive }.from(true).to(false)
+    end
+  end
 end
