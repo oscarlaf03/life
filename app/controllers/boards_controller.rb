@@ -25,7 +25,9 @@ class BoardsController < ApplicationController
   end
 
   def next
-    @board.next!
+    next_times.times do
+      @board.next!
+    end
     render json: @board.public_attributes
   end
 
@@ -56,5 +58,13 @@ class BoardsController < ApplicationController
 
     def board_params
       permit_params.merge(initial_cells: permit_params[:initial_cells].to_json)
+    end
+
+    def next_params
+      params.permit(:times)
+    end
+
+    def next_times
+      next_params[:times] || 1
     end
 end
