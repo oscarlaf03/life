@@ -11,7 +11,7 @@ module Api
         @board = Board.new(board_params)
 
         if @board.save
-          render json: { board_id: @board.id }, status: :created, location: @board
+          render json: { board_id: @board.id }, status: :created
         else
           render json: @board.errors, status: :unprocessable_entity
         end

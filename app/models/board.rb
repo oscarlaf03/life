@@ -21,7 +21,7 @@ class Board < ApplicationRecord
       raise ApiException::NotAllowed.new "Board concluded, nothing changed after run number #{runs}"
     end
     affected.each(&:toggle!)
-    update(runs: runs + 1)
+    update(runs: runs + 1, last_affected: affected.size)
   end
 
   private
