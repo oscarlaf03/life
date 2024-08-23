@@ -16,12 +16,12 @@ class Board < ApplicationRecord
 
   def next!
     raise StandardError.new "Over Board number of runs limit" if runs + 1 >= RUN_LIMIT
-    update(runs: runs + 1)
     affected = cells.select { |cell| cell.should_toggle? }
     if affected.size.zero? && !runs.zero?
       raise StandardError.new "Board concluded, nothing changed after run number #{runs}"
     end
     affected.each(&:toggle!)
+    update(runs: runs + 1)
   end
 
   def public_attributes
