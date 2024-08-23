@@ -6,7 +6,7 @@ class Board < ApplicationRecord
   validates :columns, numericality: { less_than_or_equal_to: COLUMN_LIMIT }
   validate :initial_cells_format
 
-  has_many :cells
+  has_many :cells, dependent: :destroy
 
   after_create :init_board
 
@@ -22,6 +22,16 @@ class Board < ApplicationRecord
       raise StandardError.new "Board concluded, nothing changed after run number #{runs}"
     end
     affected.each(&:toggle!)
+  end
+
+  def public_attributes
+    {
+      id: id,
+      rows: rows,
+      columns: columns,
+      runs: runs,
+      live_cells: live_cells.map(&:public_attributes)
+    }
   end
 
   private

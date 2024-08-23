@@ -11,6 +11,13 @@ class Cell < ApplicationRecord
     update(alive: !alive)
   end
 
+  def public_attributes
+    {
+      row: row,
+      column: column
+    }
+  end
+
   private
 
   def lonely?

@@ -1,5 +1,5 @@
 class BoardsController < ApplicationController
-  before_action :set_board, only: %i[ show update destroy ]
+  before_action :set_board, only: %i[ show update destroy next]
 
   # GET /boards
   def index
@@ -10,7 +10,7 @@ class BoardsController < ApplicationController
 
   # GET /boards/1
   def show
-    render json: @board
+    render json: @board.public_attributes
   end
 
   # POST /boards
@@ -18,10 +18,15 @@ class BoardsController < ApplicationController
     @board = Board.new(board_params)
 
     if @board.save
-      render json: @board, status: :created, location: @board
+      render json: { board_id: @board.id }, status: :created, location: @board
     else
       render json: @board.errors, status: :unprocessable_entity
     end
+  end
+
+  def next
+    @board.next!
+    render json: @board.public_attributes
   end
 
   # PATCH/PUT /boards/1
@@ -45,7 +50,11 @@ class BoardsController < ApplicationController
     end
 
     # Only allow a list of trusted parameters through.
+    def permit_params
+      params.require(:board).permit(:rows, :columns, initial_cells: [:row,  :column])
+    end
+
     def board_params
-      params.require(:board).permit(:runs, :last_affected, :initial_cells, :rows, :columns)
+      permit_params.merge(initial_cells: permit_params[:initial_cells].to_json)
     end
 end
