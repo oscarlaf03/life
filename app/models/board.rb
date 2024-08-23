@@ -24,16 +24,6 @@ class Board < ApplicationRecord
     update(runs: runs + 1)
   end
 
-  def public_attributes
-    {
-      id: id,
-      rows: rows,
-      columns: columns,
-      runs: runs,
-      live_cells: live_cells.map(&:public_attributes)
-    }
-  end
-
   private
 
   def init_board

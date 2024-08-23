@@ -2,17 +2,11 @@ module Api
   module V1
     class BoardsController < ApplicationController
       before_action :set_board, only: %i[ show next]
-      def index
-        @boards = Board.all
-
-        render json: @boards
-      end
 
       def show
         render json: @board
       end
 
-      # POST /boards
       def create
         @board = Board.new(board_params)
 
@@ -30,12 +24,11 @@ module Api
         render json: @board.public_attributes
       end
       private
-      # Use callbacks to share common setup or constraints between actions.
+
       def set_board
         @board = Board.find(params[:id])
       end
 
-      # Only allow a list of trusted parameters through.
       def permit_params
         params.require(:board).permit(:rows, :columns, initial_cells: [ :row,  :column ])
       end
