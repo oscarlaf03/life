@@ -47,13 +47,18 @@ class Board < ApplicationRecord
   end
 
   def fill_rest_of_board
+    existing_cells = live_cells.pluck(:row, :column)
+    new_cells = []
+
     (1..rows).each do |row|
       (1..columns).each do |column|
-        unless taken?(row, column)
-          Cell.create(row: row, column: column, board: self)
+        unless existing_cells.include?([ row, column ])
+          new_cells << { row: row, column: column, board_id: id }
         end
       end
     end
+
+    Cell.insert_all(new_cells) unless new_cells.empty?
   end
 
   def taken?(row, column)
