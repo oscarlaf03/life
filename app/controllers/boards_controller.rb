@@ -51,7 +51,7 @@ class BoardsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def permit_params
-      params.require(:board).permit(:rows, :columns, initial_cells: [:row,  :column])
+      params.require(:board).permit(:rows, :columns, initial_cells: [ :row,  :column ])
     end
 
     def board_params
