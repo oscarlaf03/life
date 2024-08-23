@@ -16,7 +16,7 @@ class Board < ApplicationRecord
 
   def next!
     raise OutOfRange::BadRequest.new "Over Board number of runs limit" if runs + 1 >= RUN_LIMIT
-    affected = cells.select { |cell| cell.should_toggle? }
+    affected = cells_to_analize.select { |cell| cell.should_toggle? }
     if affected.size.zero? && !runs.zero?
       raise ApiException::NotAllowed.new "Board concluded, nothing changed after run number #{runs}"
     end
@@ -25,6 +25,11 @@ class Board < ApplicationRecord
   end
 
   private
+
+  def cells_to_analize
+    live_neighbors_ids = live_cells.map { |cell| cell.neighbors.pluck(:id) }.flatten.uniq
+    live_cells.or(cells.where(id: live_neighbors_ids))
+  end
 
   def init_board
     create_initial_cells
@@ -54,8 +59,6 @@ class Board < ApplicationRecord
   def taken?(row, column)
     live_cells.where(row: row, column: column).present?
   end
-
-
 
   def initial_cells_format
     return if initial_cells == "[]"

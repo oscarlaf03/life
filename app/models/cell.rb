@@ -11,6 +11,13 @@ class Cell < ApplicationRecord
     update(alive: !alive)
   end
 
+  def neighbors
+    cells.where(
+      row: [ row, row - 1, row + 1 ],
+      column: [ column, column - 1, column + 1 ]
+      ).where.not(row: row, column: column)
+  end
+
   private
 
   def lonely?
@@ -27,13 +34,6 @@ class Cell < ApplicationRecord
 
   def should_become_alive?
     !alive && live_neighbors.count == 3
-  end
-
-  def neighbors
-    cells.where(
-      row: [ row, row - 1, row + 1 ],
-      column: [ column, column - 1, column + 1 ]
-      ).where.not(row: row, column: column)
   end
 
   def live_neighbors

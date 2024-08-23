@@ -21,7 +21,7 @@ module Api
         next_times.times do
           @board.next!
         end
-        render json: @board.public_attributes
+        render json: @board
       end
       private
 
