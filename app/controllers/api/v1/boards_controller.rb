@@ -3,6 +3,11 @@ module Api
     class BoardsController < ApplicationController
       before_action :set_board, only: %i[ show next]
 
+      def index
+        @boards = Board.all
+        render json: @boards, each_serializer: BoardSummarySerializer
+      end
+
       def show
         render json: @board
       end

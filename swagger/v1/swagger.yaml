@@ -5,29 +5,105 @@ info:
   version: v1
 paths:
   "/api/v1/boards/{id}/next":
-    parameters:
-    - name: id
-      in: path
-      description: id
-      required: true
-      schema:
-        type: string
     post:
-      summary: next board
+      summary: brings board to it's next state
+      tags:
+      - Board
+      parameters:
+      - name: id
+        in: path
+        description: id of the board you want to iterate over
+        required: true
+        schema:
+          type: string
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                times:
+                  type: integer
+              required: false
+              description: The number of times you want to iterate next if abscent
+                will iteratee just once
+            examples:
+              Example to run twice:
+                summary: Run next stage two times
+                value:
+                  times: 2
   "/api/v1/boards":
     get:
-      summary: list boards
+      summary: lists boards
+      tags:
+      - Board
       responses:
         '200':
           description: successful
     post:
-      summary: create board
+      summary: creates board
+      tags:
+      - Board
+      parameters: []
       responses:
         '200':
           description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rows:
+                  type: integer
+                columns:
+                  type: integer
+                initial_cells:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      row:
+                        type: integer
+                      column:
+                        type: integer
+              required: true
+            examples:
+              Infinite Loop shape:
+                summary: Shape results in an infinite loop
+                value:
+                  rows: 100
+                  columns: 100
+                  initial_cells:
+                  - row: 25
+                    column: 25
+                  - row: 25
+                    column: 24
+                  - row: 25
+                    column: 26
+                  - row: 24
+                    column: 25
+                  - row: 26
+                    column: 25
+              One iteration shape:
+                summary: Shape results in conclusion after just one iteration
+                value:
+                  rows: 3
+                  columns: 3
+                  initial_cells:
+                  - row: 1
+                    column: 1
+                  - row: 1
+                    column: 3
+                  - row: 2
+                    column: 2
+                  - row: 3
+                    column: 1
+                  - row: 3
+                    column: 3
   "/api/v1/boards/{id}":
     parameters:
     - name: id
@@ -37,27 +113,14 @@ paths:
       schema:
         type: string
     get:
-      summary: show board
-      responses:
-        '200':
-          description: successful
-    patch:
-      summary: update board
-      responses:
-        '200':
-          description: successful
-    put:
-      summary: update board
-      responses:
-        '200':
-          description: successful
-    delete:
-      summary: delete board
+      summary: shows board by id
+      tags:
+      - Board
       responses:
         '200':
           description: successful
 servers:
-- url: https://{defaultHost}
+- url: http://localhost:3000
   variables:
     defaultHost:
-      default: www.example.com
+      default: loclahost
