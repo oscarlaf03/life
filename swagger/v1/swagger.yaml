@@ -4,36 +4,6 @@ info:
   title: API V1
   version: v1
 paths:
-  "/api/v1/boards/{id}/next":
-    post:
-      summary: brings board to it's next state
-      tags:
-      - Board
-      parameters:
-      - name: id
-        in: path
-        description: id of the board you want to iterate over
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description: successful
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                times:
-                  type: integer
-              description: The number of times you want to iterate next if abscent
-                will iteratee just once
-            examples:
-              Example to run twice:
-                summary: Run next stage two times
-                value:
-                  times: 2
   "/api/v1/boards":
     get:
       summary: lists boards
@@ -118,6 +88,36 @@ paths:
       responses:
         '200':
           description: successful
+  "/api/v1/boards/{id}/next":
+    post:
+      summary: brings board to it's next state
+      tags:
+      - Board
+      parameters:
+      - name: id
+        in: path
+        description: id of the board you want to iterate over
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                times:
+                  type: integer
+              description: The number of times you want to iterate next if abscent
+                will iteratee just once
+            examples:
+              Example to run twice:
+                summary: Run next stage two times
+                value:
+                  times: 2
 servers:
 - url: http://localhost:3000
   variables:

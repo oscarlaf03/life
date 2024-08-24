@@ -1,36 +1,6 @@
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/boards', type: :request do
-  path '/api/v1/boards/{id}/next' do
-    post('brings board to it\'s next state') do
-      tags 'Board'
-      consumes 'application/json'
-      parameter name: :id, in: :path, type: :string, description: 'id of the board you want to iterate over', required: true
-      parameter name: :times, in: :body, schema: {
-        type: :object,
-        properties: {
-          times: { type: :integer }
-        },
-        description: "The number of times you want to iterate next if abscent will iteratee just once"
-      }, required: false
-      twice_example = { "times": 2 }
-      request_body_example value: twice_example, name: 'Example to run twice', summary: 'Run next stage two times'
-
-      response(200, 'successful') do
-        let(:id) { create(:board, :star_shape).id }
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
-            }
-          }
-        end
-        run_test!
-      end
-    end
-  end
-
   path '/api/v1/boards' do
     get('lists boards') do
       tags 'Board'
@@ -142,6 +112,36 @@ RSpec.describe 'api/v1/boards', type: :request do
       produces 'application/json'
       response(200, 'successful') do
         let(:id) { Board.all.pluck(:id).sample }
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+    end
+  end
+
+  path '/api/v1/boards/{id}/next' do
+    post('brings board to it\'s next state') do
+      tags 'Board'
+      consumes 'application/json'
+      parameter name: :id, in: :path, type: :string, description: 'id of the board you want to iterate over', required: true
+      parameter name: :times, in: :body, schema: {
+        type: :object,
+        properties: {
+          times: { type: :integer }
+        },
+        description: "The number of times you want to iterate next if abscent will iteratee just once"
+      }, required: false
+      twice_example = { "times": 2 }
+      request_body_example value: twice_example, name: 'Example to run twice', summary: 'Run next stage two times'
+
+      response(200, 'successful') do
+        let(:id) { create(:board, :star_shape).id }
+
         after do |example|
           example.metadata[:response][:content] = {
             'application/json' => {
