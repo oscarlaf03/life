@@ -27,7 +27,6 @@ paths:
               properties:
                 times:
                   type: integer
-              required: false
               description: The number of times you want to iterate next if abscent
                 will iteratee just once
             examples:
@@ -49,7 +48,7 @@ paths:
       - Board
       parameters: []
       responses:
-        '200':
+        '201':
           description: successful
       requestBody:
         content:

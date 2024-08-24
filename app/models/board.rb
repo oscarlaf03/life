@@ -15,7 +15,7 @@ class Board < ApplicationRecord
   end
 
   def next!
-    raise OutOfRange::BadRequest.new "Over Board number of runs limit" if runs + 1 >= RUN_LIMIT
+    raise ApiException::OutOfRange.new "Board number of runs #{runs} has reached the limit #{RUN_LIMIT}" if runs + 1 > RUN_LIMIT
     affected = cells_to_analize.select { |cell| cell.should_toggle? }
     if affected.size.zero? && !runs.zero?
       raise ApiException::NotAllowed.new "Board concluded, nothing changed after run number #{runs}"

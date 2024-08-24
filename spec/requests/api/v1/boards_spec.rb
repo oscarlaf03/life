@@ -11,14 +11,13 @@ RSpec.describe 'api/v1/boards', type: :request do
         properties: {
           times: { type: :integer }
         },
-        required: false,
         description: "The number of times you want to iterate next if abscent will iteratee just once"
-      }
+      }, required: false
       twice_example = { "times": 2 }
       request_body_example value: twice_example, name: 'Example to run twice', summary: 'Run next stage two times'
 
       response(200, 'successful') do
-        let(:id) { '123' }
+        let(:id) { create(:board, :star_shape).id }
 
         after do |example|
           example.metadata[:response][:content] = {
@@ -52,7 +51,7 @@ RSpec.describe 'api/v1/boards', type: :request do
       tags "Board"
       consumes 'application/json'
 
-      parameter name: :board, in: :body, schema: {
+      parameter name: :board, in: :body, type: :object, schema: {
         type: :object,
         properties: {
           rows: { type: :integer },
@@ -120,7 +119,8 @@ RSpec.describe 'api/v1/boards', type: :request do
       }
       request_body_example value: infinite_loop, name: 'Infinite Loop shape', summary: 'Shape results in an infinite loop'
       request_body_example value: one_iteration, name: 'One iteration shape', summary: 'Shape results in conclusion after just one iteration'
-      response(200, 'successful') do
+      response(201, 'successful') do
+        let(:board) { infinite_loop }
         after do |example|
           example.metadata[:response][:content] = {
             'application/json' => {
@@ -141,8 +141,7 @@ RSpec.describe 'api/v1/boards', type: :request do
       tags 'Board'
       produces 'application/json'
       response(200, 'successful') do
-        let(:id) { '123' }
-
+        let(:id) { Board.all.pluck(:id).sample }
         after do |example|
           example.metadata[:response][:content] = {
             'application/json' => {
