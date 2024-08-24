@@ -13,7 +13,7 @@ The basic rules are as follows:
 
 ## Getting Started
 
-This app uses Rails [version 7.2](https://rubyonrails.org/2024/8/10/Rails-7-2-0-has-been-released), which introduces a very cool feature of dev containers. Therefore, the app can run smoothly in a Docker container. You just need to have Docker installed and running on your machine. If you are using VS Code, the Docker extension comes in very handy.
+This app uses Rails [version 7.2](https://rubyonrails.org/2024/8/10/Rails-7-2-0-has-been-released), which introduces a very cool feature of dev containers. Therefore, the app can run smoothly in a Docker container. You just need to have Docker installed and running on your machine. If you are using VS Code, the Docker extension comes in very handy and more importantly the VS Code Dev Container extension.
 
 To get started:
 - [Get Docker and Docs](https://docs.docker.com/get-started/get-docker/)
